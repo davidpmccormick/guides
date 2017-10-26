@@ -39,7 +39,7 @@ app.import('bower_components/moment/moment.js');
 You will need to add `"moment"` to the `globals` section in `.eslintrc.js` to prevent ESLint errors
 about using an undefined variable.
 
-### AMD JavaScript modules
+### Named AMD JavaScript modules
 
 Provide the asset path as the first argument, and the list of modules and exports as the second.
 
@@ -58,6 +58,26 @@ app.import('bower_components/ic-ajax/dist/named-amd/main.js', {
 ```
 
 You can now `import` them in your app. (e.g. `import { raw as icAjaxRaw } from 'ic-ajax';`)
+
+### Anonymous AMD JavaScript modules
+
+Many libraries do one of the following:
+
+- check for `typeof define === 'function' && define.amd` 
+- call `define` with just a factory function, or a dependency list and factory function
+
+In order to make use of these exports, provide the asset path as the first argument, and specify an object to a `using` key as the second. This object should contain a `transformation` key specifying the type of tranformation ('amd'), and an `as` key, specifying the name by which your module will be importable.
+
+```ember-cli-build.js
+app.import('/path/to/some-dep.js', {
+  using: [
+    { transformation: 'amd', as: 'some-dep' }
+  ]
+});
+```
+
+Then you can `import someDep from 'some-dep';`
+
 
 ### Environment-Specific Assets
 
